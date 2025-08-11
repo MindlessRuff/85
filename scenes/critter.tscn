@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://djthpvwxm2vki"]
+
+[ext_resource type="Script" uid="uid://nlu8xahvpe3t" path="res://scripts/critter.gd" id="1_oeans"]
+[ext_resource type="Texture2D" uid="uid://b7ulsugx31t8" path="res://icon.svg" id="2_qlvc6"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="3_fraou"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_5mxoi"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_1ty1m"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="6_bxkvv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cw6cr"]
+radius = 72.205
+height = 144.41
+
+[node name="Critter" type="CharacterBody2D"]
+scale = Vector2(0.34375, 0.34375)
+script = ExtResource("1_oeans")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_cw6cr")
+
+[node name="CritterSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_qlvc6")
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("3_fraou")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("4_5mxoi")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_1ty1m")
+
+[node name="ToWander" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("6_bxkvv")
+to = NodePath("../../Wander")
+event = &"wander_start"
+delay_in_seconds = "0.0"
+
+[node name="Wander" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_1ty1m")
+
+[node name="ToIdle" type="Node" parent="StateChart/Root/Wander"]
+script = ExtResource("6_bxkvv")
+to = NodePath("../../Idle")
+event = &"idle_state"
+delay_in_seconds = "0.0"
+
+[node name="WanderTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="state_entered" from="StateChart/Root/Wander" to="." method="_on_wander_state_entered"]
+[connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]

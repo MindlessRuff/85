@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://bj6ikbnpntfr1"]
+
+[ext_resource type="Script" uid="uid://ca3odeory8hun" path="res://scripts/game.gd" id="1_jpbhf"]
+[ext_resource type="Texture2D" uid="uid://b7ulsugx31t8" path="res://icon.svg" id="2_cw6cr"]
+[ext_resource type="PackedScene" uid="uid://djthpvwxm2vki" path="res://scenes/critter.tscn" id="3_6y8rp"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_6y8rp"]
+vertices = PackedVector2Array(573.047, 233.023, 100.172, 233.969, 102.82, 82.9609, 573.938, 81.0391)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(93, 73, 90, 244, 583, 243, 584, 71)])
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_jpbhf")
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(333, 261)
+scale = Vector2(4.32813, 0.203125)
+texture = ExtResource("2_cw6cr")
+
+[node name="Icon3" type="Sprite2D" parent="."]
+position = Vector2(337, 54)
+scale = Vector2(4.32813, 0.203125)
+texture = ExtResource("2_cw6cr")
+
+[node name="Icon2" type="Sprite2D" parent="."]
+position = Vector2(603, 155)
+rotation = 1.57079
+scale = Vector2(1.80812, 0.203125)
+texture = ExtResource("2_cw6cr")
+
+[node name="Icon4" type="Sprite2D" parent="."]
+position = Vector2(71.0001, 157)
+rotation = 1.57079
+scale = Vector2(1.80812, 0.203125)
+texture = ExtResource("2_cw6cr")
+
+[node name="Pen" type="Node2D" parent="."]
+
+[node name="Critter" parent="Pen" instance=ExtResource("3_6y8rp")]
+position = Vector2(334, 169)
+
+[node name="WanderRange" type="NavigationRegion2D" parent="Pen"]
+navigation_polygon = SubResource("NavigationPolygon_6y8rp")
